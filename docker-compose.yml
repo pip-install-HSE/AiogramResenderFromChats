@@ -1,0 +1,63 @@
+version: '3'
+
+services:
+
+  postgres:
+    image: postgres:13
+    container_name: postgres
+    ports:
+      - 5400:5432
+    env_file:
+      - ./env/postgres
+    environment:
+      - TZ=Ukraine/Kiev
+    volumes:
+      - ./db-data/postgres:/var/lib/postgresql/data/
+
+  mongo:
+    image: mongo:4.4
+    container_name: mongodb
+    ports:
+      - 27000:27017
+    volumes:
+      - ./db-data/mongodb:/data/db
+      - ./db-data/mongodb_config:/data/configdb
+
+
+  searcher:
+    build: ./searcher
+    network_mode: host
+    container_name: searcher
+    volumes:
+      - ./shared:/app/shared
+    environment:
+      - SHARED_FOLDER=shared/
+
+  bot:
+    build: ./bot
+    network_mode: host
+    container_name: bot
+    depends_on:
+      - postgres
+      - mongo
+    env_file:
+      - ./env/bot
+    environment:
+      - TZ=Ukraine/Kiev
+    volumes:
+      - ./shared:/app/shared
+      - ./logs:/app/logs
+
+  web:
+    build: ./web
+    network_mode: host
+    container_name: web
+    depends_on:
+      - postgres
+    env_file:
+      - ./env/web
+    volumes:
+      - ./shared:/app/shared
+      - ./logs:/app/logs
+    ports:
+      - 8000:8000

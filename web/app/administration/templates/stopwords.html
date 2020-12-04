@@ -1,0 +1,17 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+    Стоп-слова
+{% endblock %}
+
+{% block content%}
+
+    <h4>Стоп слова</h4>
+
+    <form method="post" action="{% url 'home' %}">
+        {% csrf_token %}
+        {{ form }}
+        <input type="submit" value="Сохранить" class="btn btn-outline-success mt-2">
+    </form>
+
+{% endblock %}

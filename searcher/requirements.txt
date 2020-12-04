@@ -1,0 +1,8 @@
+asyncio==3.4.3
+asyncpg==0.21.0
+motor==2.3.0
+logger==1.4
+pyaes==1.6.1
+pyasn1==0.4.8
+rsa==4.6
+Telethon==1.17.5
